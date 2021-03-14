@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const config = require('./config/database')
 const session = require('express-session')
 const expressValidator = require('express-validator')
+const fileUpload = require('express-fileupload')
 
 const port = process.env.PORT || 3000
 
@@ -84,15 +85,21 @@ app.use(function (req, res, next) {
   next();
 });
 
+//setting up express-fileupload middleware
+app.use(fileUpload());
+
 
 
 //setting up routes
 const pages = require('./routes/pages.js')
 const admin_pages = require('./routes/admin_pages.js')
 const admin_categories = require('./routes/admin_categories.js')
+const admin_products = require('./routes/admin_products')
 app.use('/',pages)
 app.use('/admin/pages',admin_pages)
 app.use('/admin/categories',admin_categories)
+app.use('/admin/products',admin_products)
+
 
 
 app.listen(port,()=>{
