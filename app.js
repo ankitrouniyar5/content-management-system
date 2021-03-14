@@ -89,8 +89,10 @@ app.use(function (req, res, next) {
 //setting up routes
 const pages = require('./routes/pages.js')
 const admin_pages = require('./routes/admin_pages.js')
+const admin_categories = require('./routes/admin_categories.js')
 app.use('/',pages)
 app.use('/admin/pages',admin_pages)
+app.use('/admin/categories',admin_categories)
 
 
 app.listen(port,()=>{

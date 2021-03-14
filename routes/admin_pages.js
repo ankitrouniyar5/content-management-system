@@ -73,7 +73,7 @@ router.post('/add-page',(req,res)=>{
                     if(err){
                         return console.log(err)
                     }else{
-                        req.flash('sucess','Page added!')
+                        req.flash('success','Page added!')
                         res.redirect('/admin/pages')
                     }
                 })
@@ -105,15 +105,15 @@ router.get('/delete-page/:id',(req,res)=>{
         if(err)
         return console.log(err);
 
-        req.flash('sucess','Page was sucessfully deleted')
+        req.flash('success','Page was sucessfully deleted')
         res.redirect('/admin/pages')
     })
 })
 
-router.get('/edit-page/:slug',async (req,res)=>{
+router.get('/edit-page/:id',async (req,res)=>{
     
     try {
-        page = await Page.findOne({slug : req.params.slug})
+        page = await Page.findById(req.params.id)
         res.render('admin/edit_page',{
             title : page.title,
             content : page.content,
@@ -127,12 +127,12 @@ router.get('/edit-page/:slug',async (req,res)=>{
     
 
 })
-router.post('/edit-page/:slug',(req,res)=>{
+router.post('/edit-page/:id',(req,res)=>{
 
     req.checkBody('content',"Content cannot be empty").notEmpty();
     req.checkBody('title',"Title cannot be empty").notEmpty()
     var title = req.body.title;
-    var id = req.body.id;
+    var id = req.params.id;
     var slug = req.body.slug.replace(/\s+/g,'-').toLowerCase();
 
     if (slug == ""){
@@ -179,7 +179,7 @@ router.post('/edit-page/:slug',(req,res)=>{
                                 return console.log(err)
 
                             req.flash('success','Page updated')
-                            res.redirect('/admin/pages/edit-page/'+page.slug);    
+                            res.redirect('/admin/pages/edit-page/'+id);    
                         })
                     }
                 })
