@@ -23,71 +23,108 @@ router.get('/',async (req,res)=>{
    
 })
 
-router.get('/add-page',(req,res)=>{
+router.get('/add-product',async (req,res)=>{
 
-    var slug=""
+    var desc=""
     var title=""
-    var content =""
+    var price =""
 
-    res.render('admin/add_page',{
-        title,
-        slug,
-        content
-    })
+    try {
+        categories = await Category.find()
+        res.render('admin/add_product',{
+            title,
+            desc,
+            price,
+            categories
+        })
+    } catch (error) {
+        console.log(error)
+    }
+    
 })
 
 
-router.post('/add-page',(req,res)=>{
+router.post('/add-product',async (req,res)=>{
 
-    
-    req.checkBody('content',"Content cannot be empty").notEmpty();
-    req.checkBody('title',"Title cannot be empty").notEmpty()
-    var title = req.body.title;
-
-    var slug = req.body.slug.replace(/\s+/g,'-').toLowerCase();
-
-    if (slug == ""){
-        slug = title.replace(/\s+/g,'-').toLowerCase();
+    if(!req.files){ 
+        imageFile =""; 
     }
+   if(req.files){
+   var imageFile = typeof(req.files.image) !== "undefined" ? req.files.image.name : "";
+   }
+    req.checkBody('title',"Title cannot be empty").notEmpty()
+    req.checkBody('desc',"Description cannot be empty").notEmpty();
+    req.checkBody('price',"Price must have a value").isDecimal();
+    req.checkBody('image',"You must upload an image").isImage(imageFile)
 
-    var content = req.body.content;
-
+    var title = req.body.title;
+    var slug = title.replace(/\s+/g,'-').toLowerCase();
+    var desc = req.body.desc;
+    var price = req.body.price;
+    var category = req.body.category;
+    
     var errors = req.validationErrors();
 
     if(errors){
-            res.render('admin/add_page',{
-            errors: errors,
-            title: title,
-            slug: slug,
-            content: content
+        Category.find(function(err,categories){
+            res.render('admin/add_product',{
+                title,
+                desc,
+                price,
+                categories,
+                errors
+            })
         })
+        
     }else{
-        Page.findOne({slug : slug},(err,page)=>{
+        categories = await Category.find()
+        Product.findOne({slug : slug},(err,product)=>{
 
-            if(page){
+            if(product){
 
-                req.flash('danger','The slug is already used.Please try another one.')
-                res.render('admin/add_page',{
-                    title : title,
-                    content : content,
-                    slug : slug
+                req.flash('danger','The product title is already used.Please try another one.')
+                res.render('admin/add_product',{
+                    title,
+                    desc,
+                    price,
+                    categories
                 })
 
             }else{
-
-                var page = new Page({
-                    title : title,
-                    content : content,
-                    slug : slug,
-                    sorting : 100
+                var price2 = parseFloat(price).toFixed(2)
+                var product = new Product({
+                    title,
+                    desc,
+                    price : price2,
+                    slug,
+                    image : imageFile,
+                    category : category
                 });
 
-                page.save(function (err){
+                product.save(function (err){
                     if(err){
                         return console.log(err)
                     }else{
-                        req.flash('success','Page added!')
-                        res.redirect('/admin/pages')
+
+                        mkdirp('public/product_images/'+ product._id,(err)=>{
+                            return console.log(err)
+                        })
+                        mkdirp('public/product_images/'+ product._id + '/gallery',(err)=>{
+                            return console.log(err)
+                        })
+                        mkdirp('public/product_images/'+product._id + '/gallery/thumbs',(err)=>{
+                            return console.log(err)
+                        })
+                        if(imageFile != ""){
+                            var productImage = req.files.image
+                            var path = 'public/product_images/' + product._id +'/'+imageFile;
+
+                            productImage.mv(path,(err)=>{
+                                return console.log(err)
+                            })
+                        }
+                        req.flash('success','Product added!')
+                        res.redirect('/admin/products')
                     }
                 })
             }

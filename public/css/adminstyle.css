@@ -5,3 +5,7 @@
 .ui-state-highlight{
     border: 2px dashed #cccccc;
 }
+
+#imgPreview{
+    margin : 20px
+}
