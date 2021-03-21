@@ -160,24 +160,50 @@ router.get('/delete-page/:id',(req,res)=>{
     })
 })
 
-router.get('/edit-page/:id',async (req,res)=>{
+router.get('/edit-product/:id',async (req,res)=>{
     
-    try {
-        page = await Page.findById(req.params.id)
-        res.render('admin/edit_page',{
-            title : page.title,
-            content : page.content,
-            slug : page.slug,
-            id : page._id,
-        })
-
-    } catch (error) {
-        console.log(error)
+    var errors;
+    if (req.session.errors ){
+        errors = req.session.errors
     }
+    req.session.errors = null
+
+    categories = await Category.find();
+    Product.findById(req.params.id,(err,p)=>{
+        if(err){
+            console.log(err)
+            res.redirect('admin/products')
+        }else{
+            var galleryDir = 'public/product_images/' + p._id + '/gallery'
+            var galleryImages = null;
+
+            fs.readdir(galleryDir,(err,files)=>{
+                if(err){
+                    console.log(err)
+                }else{
+                    galleryImages = files;
+                    res.render('admin/add_product',{
+                        title : p.title,
+                        desc : p.desc,
+                        categories,
+                        category : p.category.replace(/\s+/g,'-').toLowerCase(),
+                        errors : errors,
+                        price : p.price,
+                        image:p.image,
+                        galleryImages : galleryImages
+                    })
+
+                }
+            })
+
+
+        }
+    })
+   
     
 
 })
-router.post('/edit-page/:id',(req,res)=>{
+router.post('/edit-product/:id',(req,res)=>{
 
     req.checkBody('content',"Content cannot be empty").notEmpty();
     req.checkBody('title',"Title cannot be empty").notEmpty()
