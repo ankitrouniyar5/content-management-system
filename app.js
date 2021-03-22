@@ -9,7 +9,7 @@ const fileUpload = require('express-fileupload')
 const port = process.env.PORT || 3000
 
 //conneting to db
-mongoose.connect(config.database,{useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(config.database,{useNewUrlParser: true, useUnifiedTopology: true ,useFindAndModify: false })
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {

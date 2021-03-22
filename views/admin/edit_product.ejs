@@ -1,0 +1,117 @@
+<%- include('../_layouts/admin_header') %>
+
+<h2 class="page-title">Edit product</h2>
+<a href="/admin/products" class="btn btn-primary">Back to all products</a>
+<br><br>
+
+<form method="post" action="/admin/products/edit-product/<%= id %>" enctype="multipart/form-data">
+    
+    <div class="form-group mb-3">
+        <label for="">Title</label>
+        <input type="text" class="form-control" name="title" value="<%= title %>" placeholder="Title">
+    </div>
+    
+    <div class="form-group mb-3">
+        <label for="">Description</label>
+        <input type="text" class="form-control" name="desc" value="<%= desc %>" placeholder="Description">
+    </div>
+
+    
+    <div >
+        <label for="">Category</label>
+        <select name = "category" class="form-select mb-3">
+        <% categories.forEach(cat => { %>
+         <option  value="<%= cat.slug %>"
+            <% if (cat.slug == category) {%>
+                selected = "selected"
+            
+            <% } %> 
+            ><%= cat.title %> </option>
+        <% }) %>
+    </select>
+    </div>
+    
+    <div class="form-group mb-3">
+        <label for="">Price</label>
+        <input type="text" class="form-control" name="price" value="<%= price %>" placeholder="Price">
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="">Current Image</label>
+        <p>
+       <% if(image){ %>
+        <img id = "imagePreview" height = "200p" width = "200" src="/product_images/<%= id %>/<%= image %>">
+        <% }else{ %> 
+        <img id = "imagePreview" src = "/images/noimage.jpg" alt="No image found" >
+        <% } %>
+        </p> 
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="">Upload Image</label>
+        <input type="file" class="form-control" name="image" id = "img">
+        <img src="#" id="imgPreview" >
+    </div>
+    <input type="hidden" name="pimage" value="<%= image %>">
+    <button class="btn btn-primary">Submit</button>
+    
+</form>
+<hr>
+<h3 class="page-header"></h3>
+    <ul class="gallery">
+        <% galleryImages.forEach(function(image) { %>
+             <%   if(image!='thumbs'){ %>
+            <li>
+             <img src="/product_images/<%=id%>/gallery/thumbs/<%=image %>" alt="">&nbsp
+             <a class="confirmDeletion" href="/admin/products/delete-image/<%= image %>?id=<%= id %>">Delete</a>
+         </li>
+         <% }%>
+             
+        <% }) %> 
+
+    </ul>
+
+    <br><br>
+    <form action="/admin/products/product-gallery/<%= id %>" method="POST" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+    <div class="fallback">
+        <input type="file" name="file" multiple>
+        <input type="submit" value="Upload">
+    </div>
+    </form>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.8.1/basic.css" integrity="sha512-+Vla3mZvC+lQdBu1SKhXLCbzoNCl0hQ8GtCK8+4gOJS/PN9TTn0AO6SxlpX8p+5Zoumf1vXFyMlhpQtVD5+eSw==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.8.1/dropzone.css" integrity="sha512-7uSoC3grlnRktCWoO4LjHMjotq8gf9XDFQerPuaph+cqR7JC9XKGdvN+UwZMC14aAaBDItdRj3DcSDs4kMWUgg==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.8.1/min/dropzone.min.js" integrity="sha512-OTNPkaN+JCQg2dj6Ht+yuHRHDwsq1WYsU6H0jDYHou/2ZayS2KXCfL28s/p11L0+GSppfPOqwbda47Q97pDP9Q==" crossorigin="anonymous"></script>
+<script>
+
+    function readURL(input){
+        if(input.files && input.files[0]){
+            var reader = new FileReader();
+
+            reader.onload = function(e){
+                $("#imgPreview").attr('src',e.target.result).width(200).height(200);
+            }
+
+            reader.readAsDataURL(input.files[0])
+        }
+
+
+    }
+
+    $("#img").change(function(){
+        readURL(this)
+       
+    })
+    //dropzone
+
+    Dropzone.options.dropzoneForm = {
+        acceptedFile : 'images/*',
+        init : function(){
+            this.on("queuecomplete",function(file){
+                    setTimeout(function(){
+                    location.reload()
+                },1000)
+            })
+        }
+    }
+</script>
+<%- include('../_layouts/admin_footer') %>
