@@ -70,12 +70,17 @@ router.post('/add-page',(req,res)=>{
                 });
 
                 page.save(function (err){
-                    if(err){
-                        return console.log(err)
-                    }else{
+                    if(err) return console.log(err)
+
+                Page.find({}).sort({sorting  :1}).exec((err,pages)=>{
+    
+                    if(err) return console.log(err);
+            
+                        req.app.locals.pages=pages;     
+                })      
                         req.flash('success','Page added!')
                         res.redirect('/admin/pages')
-                    }
+                    
                 })
             }
         })
@@ -83,20 +88,47 @@ router.post('/add-page',(req,res)=>{
 
 })
 
-router.post('/reorder-pages',async (req,res)=>{
-    
-    
-    var ids = req.body.id
-    count = 0;
+//function for sortung pages
+
+function sortPages (ids,callback){
+
+    let count = 0;
+
     ids.forEach(async (id) => {
         count++;
         try {
             page = await Page.updateOne({_id:id},{sorting  : count});
-        
+            if(count >= ids.length ){
+                callback();
+            }
         } catch (error) {
             return console.log(error)
         }
     });
+
+}
+
+router.post('/reorder-pages',async (req,res)=>{
+    
+    
+    var ids = req.body.id
+    
+    sortPages (ids, function(){
+        
+        Page.find({}).sort({sorting  :1}).exec((err,pages)=>{
+    
+            if(err) return console.log(err);
+            
+            req.app.locals.pages=pages;
+            
+            
+        })
+
+    })
+    
+
+
+
 })
 
 router.get('/delete-page/:id',(req,res)=>{
@@ -105,6 +137,12 @@ router.get('/delete-page/:id',(req,res)=>{
         if(err)
         return console.log(err);
 
+        Page.find({}).sort({sorting  :1}).exec((err,pages)=>{
+    
+            if(err) return console.log(err);
+    
+                req.app.locals.pages=pages;     
+        })   
         req.flash('success','Page was sucessfully deleted')
         res.redirect('/admin/pages')
     })
@@ -120,6 +158,8 @@ router.get('/edit-page/:id',async (req,res)=>{
             slug : page.slug,
             id : page._id,
         })
+
+          
 
     } catch (error) {
         console.log(error)
@@ -177,6 +217,13 @@ router.post('/edit-page/:id',(req,res)=>{
                         page.save(function(err){
                             if(err)
                                 return console.log(err)
+
+                                Page.find({}).sort({sorting  :1}).exec((err,pages)=>{
+    
+                                    if(err) return console.log(err);
+                            
+                                        req.app.locals.pages=pages;     
+                                })       
 
                             req.flash('success','Page updated')
                             res.redirect('/admin/pages/edit-page/'+id);    

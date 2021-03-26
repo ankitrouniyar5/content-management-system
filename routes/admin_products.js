@@ -192,25 +192,6 @@ router.get('/delete-image/:image', (req,res)=>{
 )
 
 
-
-
-router.get('/reorder-pages',async (req,res)=>{
-    
-    
-    var ids = req.body.id
-    count = 0;
-    ids.forEach(async (id) => {
-        count++;
-        try {
-            page = await Page.updateOne({_id:id},{sorting  : count});
-        
-        } catch (error) {
-            return console.log(error)
-        }
-    });
-})
-
-
 //delete product
 
 router.get('/delete-product/:id',(req,res)=>{
@@ -218,10 +199,9 @@ router.get('/delete-product/:id',(req,res)=>{
    let id = req.params.id;
    let path = 'public/product_images/' + id
 
-   fs.rm(path,{recursive : true ,force : true},(err)=>{
-       if(err){
-        console.log(err);
-       }else{
+   fs.rmdir(path,{recursive : true ,force : true},(err)=>{
+       if(err) return console.log(err);
+       
            Product.findByIdAndRemove(id,(err)=>{
                if(err){
                    console.log(err)
@@ -231,7 +211,7 @@ router.get('/delete-product/:id',(req,res)=>{
                }
 
            })
-       }
+       
    })
 
 })

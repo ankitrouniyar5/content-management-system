@@ -1,0 +1,12 @@
+img.pimage{
+    width: 150px;
+}
+
+a.pa{
+    display:inline-block;
+    height:160px;
+}
+
+.row.products product-box{
+    margin-top: 20px;
+}

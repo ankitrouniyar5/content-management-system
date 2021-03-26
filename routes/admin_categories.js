@@ -64,6 +64,11 @@ router.post('/add-category',(req,res)=>{
                     if(err){
                         return console.log(err)
                     }else{
+                        Category.find((err,categories)=>{
+                            if(err) return console.log(err);
+                            
+                            req.app.locals.categories = categories
+                        })
                         req.flash('success','Category added!')
                         res.redirect('/admin/categories')
                     }
@@ -78,6 +83,11 @@ router.post('/add-category',(req,res)=>{
 router.get('/delete-category/:id',async (req,res)=>{
     try {
         await Category.findByIdAndRemove(req.params.id)
+        await Category.find((err,categories)=>{
+            if(err) return console.log(err);
+            
+            req.app.locals.categories = categories
+        })
         req.flash('sucess','Page was sucessfully deleted')
         res.redirect('/admin/categories')
     } catch (error) {
@@ -89,6 +99,7 @@ router.get('/edit-category/:id',async (req,res)=>{
     
     try {
         cat = await Category.findById(req.params.id)
+        
         res.render('admin/edit_category',{
             title : cat.title,
             id : cat._id,
@@ -139,6 +150,12 @@ router.post('/edit-category/:id',(req,res)=>{
                         cat.save(function(err){
                             if(err)
                                 return console.log(err)
+                            
+                                Category.find((err,categories)=>{
+                                    if(err) return console.log(err);
+                                    
+                                    req.app.locals.categories = categories
+                                })    
 
                             req.flash('success','Category Updated')
                             res.redirect('/admin/categories/edit-category/'+id);    

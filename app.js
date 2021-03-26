@@ -22,6 +22,28 @@ const app = express()
 //global error variable
 app.locals.errors = null;
 
+//get page model
+const Page = require('./models/page')
+
+Page.find({}).sort({sorting  :1}).exec((err,pages)=>{
+    
+    if(err) return console.log(err);
+    
+    app.locals.pages=pages;
+    
+    
+})
+
+//get category model
+const Category = require('./models/category')
+
+Category.find((err,categories)=>{
+    if(err) return console.log(err);
+    
+    app.locals.categories = categories
+})
+
+
 //setting up view engine
 app.set('views',path.join(__dirname,'views'))
 app.set('view engine', 'ejs')
@@ -92,13 +114,17 @@ app.use(fileUpload());
 
 //setting up routes
 const pages = require('./routes/pages.js')
+const products = require('./routes/products.js')
 const admin_pages = require('./routes/admin_pages.js')
 const admin_categories = require('./routes/admin_categories.js')
 const admin_products = require('./routes/admin_products')
-app.use('/',pages)
+
+app.use('/products',products)
+
 app.use('/admin/pages',admin_pages)
 app.use('/admin/categories',admin_categories)
 app.use('/admin/products',admin_products)
+app.use('/',pages)
 
 
 
