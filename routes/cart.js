@@ -59,10 +59,65 @@ router.get('/add/:product',async(req,res)=>{
 //get checkout page
 router.get('/checkout',async (req,res)=>{
 
+    if(req.session.cart && req.session.cart.length ==0){
+        delete req.session.cart;
+        req.flash('success','Cart Updated')
+        res.redirect('/cart/checkout')
+
+    }else{
     res.render('checkout',{
         title : 'Checkout',
         cart : req.session.cart  
     })
+}
    
+})
+
+//get update product
+
+router.get('/update/:product',(req,res)=>{
+    
+    slug = req.params.product
+    cart = req.session.cart
+    action = req.query.action
+    console.log(action)
+
+    for (let i = 0 ; i < cart.length ; i++) {
+        if(cart[i].title == slug){
+            switch(action){
+                case "add":
+                    req.session.cart[i].qty++
+                    break
+                case "remove":
+                    req.session.cart[i].qty--
+                    if(req.session.cart[i].qty < 1) req.session.cart.splice(i,1);
+                    break
+                case "clear":
+                    req.session.cart.splice(i,1);
+                    if(cart.length == 0) delete req.session.cart;
+                    break;  
+                default:
+                    console.log('Invalid Action')   
+            }
+            break;
+        }
+    }
+
+    req.flash('success','Cart Updated')
+    res.redirect('/cart/checkout')
+})
+
+
+router.get('/clear',(req,res)=>{
+
+    try {
+        delete req.session.cart
+        req.flash('success','Cart Cleared')
+        res.redirect('/cart/checkout')    
+    } catch (error) {
+        console.log(error)
+    }
+
+
 })
 module.exports = router
