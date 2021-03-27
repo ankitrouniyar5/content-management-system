@@ -1,11 +1,12 @@
 const express = require("express")
-
+const fs = require("fs-extra")
 const router = express.Router()
 
 //Page Model
 
 const Product = require('../models/product');
 const Category = require('../models/category');
+const { fstat } = require("fs-extra");
 
 
 router.get('/',async(req,res)=>{
@@ -43,6 +44,30 @@ router.get('/:category',async(req,res)=>{
     }
     
   
+})
+
+//get product details 
+router.get('/:category/:product',async(req,res)=>{
+
+        try {
+            galleryImages = null
+            prod = await Product.findOne({slug :req.params.product})
+            galleryDir = `public/product_images/${prod._id}/gallery`
+            
+            fs.readdir(galleryDir,(err,files)=>{
+                if(err) return console.log(err)
+
+                galleryImages = files;
+                res.render('product',{
+                    title : prod.title,
+                    p : prod,
+                    galleryImages
+                })
+            })
+        } catch (error) {
+            console.log(error)
+        }
+       
 })
 
 

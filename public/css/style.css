@@ -10,3 +10,26 @@ a.pa{
 .row.products product-box{
     margin-top: 20px;
 }
+
+img.spi {
+    width : 100%;
+}
+
+ul.gallery li{
+    display:inline-block;
+    margin : 20px;
+    list-style: none;
+}
+
+.empty-cart{
+    width:80%;
+    margin : 20px;
+}
+
+.cart-image{
+    width:40%;
+}
+
+table.align-middle td{
+    vertical-align: middle !important;
+}

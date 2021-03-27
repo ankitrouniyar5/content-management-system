@@ -53,7 +53,8 @@ app.use(express.static(path.join(__dirname,'public')))
 
 //setting up body parser middle ware
 app.use(express.json()); //Used to parse JSON bodies
-app.use(express.urlencoded()); //Parse URL-encoded bodies
+app.use(express.urlencoded({ extended: true }));
+
 
 //setting up express-session middle ware
 app.set('trust proxy', 1) // trust first proxy
@@ -109,11 +110,15 @@ app.use(function (req, res, next) {
 
 //setting up express-fileupload middleware
 app.use(fileUpload());
+app.get('*',(req,res,next)=>{
+    res.locals.cart = req.session.cart
+    next();
 
-
+})
 
 //setting up routes
 const pages = require('./routes/pages.js')
+const cart = require('./routes/cart.js')
 const products = require('./routes/products.js')
 const admin_pages = require('./routes/admin_pages.js')
 const admin_categories = require('./routes/admin_categories.js')
@@ -124,6 +129,7 @@ app.use('/products',products)
 app.use('/admin/pages',admin_pages)
 app.use('/admin/categories',admin_categories)
 app.use('/admin/products',admin_products)
+app.use('/cart',cart)
 app.use('/',pages)
 
 
