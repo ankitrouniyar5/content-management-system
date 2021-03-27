@@ -5,6 +5,7 @@ const config = require('./config/database')
 const session = require('express-session')
 const expressValidator = require('express-validator')
 const fileUpload = require('express-fileupload')
+const passport = require('passport')
 
 const port = process.env.PORT || 3000
 
@@ -110,8 +111,19 @@ app.use(function (req, res, next) {
 
 //setting up express-fileupload middleware
 app.use(fileUpload());
+
+//passport config
+require('./config/passport')(passport)
+
+//passport middleware
+app.use(passport.initialize())
+app.use(passport.session())
+
+
+
 app.get('*',(req,res,next)=>{
     res.locals.cart = req.session.cart
+    res.locals.user = req.user || null
     next();
 
 })
@@ -119,6 +131,8 @@ app.get('*',(req,res,next)=>{
 //setting up routes
 const pages = require('./routes/pages.js')
 const cart = require('./routes/cart.js')
+const users = require('./routes/users.js')
+
 const products = require('./routes/products.js')
 const admin_pages = require('./routes/admin_pages.js')
 const admin_categories = require('./routes/admin_categories.js')
@@ -130,6 +144,7 @@ app.use('/admin/pages',admin_pages)
 app.use('/admin/categories',admin_categories)
 app.use('/admin/products',admin_products)
 app.use('/cart',cart)
+app.use('/user',users)
 app.use('/',pages)
 
 

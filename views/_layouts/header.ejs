@@ -37,16 +37,42 @@
               <% }) %>
             
             </ul>
-            <ul class="navbar-nav">
+            <ul class="nav navbar-nav navbar-right">
+              
+              <% if (user) { %>
+                <li>
+                  <a class="navbar-link" href='/cart/checkout'>My cart(
+                    <% if (typeof cart !== "undefined") { %>
+                     <%= cart.length %> 
+                    <% } else { %>
+                      0
+                     <% } %> 
+                  )</a>
+                </li>
+                <ul>
+                  <li>
+                    <a class="navbar-link" href = '/user/logout'>Logout</a>
+                  </li>
+                </ul>
+              <% }else {%>
+              <ul>
               <li>
-                <a href='/cart/checkout'>My cart(
-                  <% if (typeof cart !== "undefined") { %>
-                   <%= cart.length %> 
-                  <% } else { %>
-                    0
-                   <% } %> 
-                )</a>
+                <a class="navbar-link" href = '/user/register'>Register</a>
               </li>
+              </ul>
+              <ul >
+              <li>
+                <a class="navbar-link" href = '/user/login'>Login</a>
+              </li>
+              </ul>
+              <%} %>
+              <% if (user && user.admin == 1) { %>
+                <ul>
+                  <li>
+                    <a class ="navbar-link"href="/admin/pages">Admin Area</a>
+                  </li>
+                </ul>
+              <% } %>  
             </ul>
             
           </div>
@@ -54,6 +80,14 @@
       </nav>
       <div class="container">
         <%- messages('messages', locals) %>
+
+        <% if(errors) {%>    
+          <% errors.forEach((error)=>{ %>
+            <div class = "alert alert-danger">
+              <%=error.msg%>
+            </div>
+          <% }) %>
+        <%} %>  
 
         <div class = "row">
           <div class="col-xs-12 col-md-3">

@@ -113,7 +113,7 @@ router.get('/clear',(req,res)=>{
     try {
         delete req.session.cart
         req.flash('success','Cart Cleared')
-        res.redirect('/cart/checkout')    
+        res.redirect('/cart/checkout')  
     } catch (error) {
         console.log(error)
     }
