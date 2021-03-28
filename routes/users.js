@@ -17,7 +17,7 @@ router.get('/register',async(req,res)=>{
     })
     } catch (error) {
         console.log(error)
-        res.status(500).send('Some error')
+        res.status(500).send(error)
     }
 })
 
@@ -79,7 +79,7 @@ router.post('/register',async(req,res)=>{
     }
     catch (error) {
         console.log(error)
-        res.status(500).send('Some error')
+        res.status(500).send(error)
     }
 })
 
@@ -95,7 +95,7 @@ router.get('/login',async(req,res)=>{
   
     } catch (error) {
         console.log(error)
-        res.status(500).send('Some error')
+        res.status(500).send(error)
     }
 })
 
@@ -110,7 +110,7 @@ router.post('/login',async(req,res,next)=>{
        })(req,res,next)
     } catch (error) {
         console.log(error)
-        res.status(500).send('Some error')
+        res.status(500).send(error)
     }
 })
 
@@ -125,7 +125,7 @@ router.get('/logout',async(req,res)=>{
   
     } catch (error) {
         console.log(error)
-        res.status(500).send('Some error')
+        res.status(500).send(error)
     }
 })
 module.exports = router

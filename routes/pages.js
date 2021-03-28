@@ -16,7 +16,7 @@ router.get('/',async(req,res)=>{
         content : page.content
     })
     } catch (error) {
-        res.status(500).send('Some error')
+        res.status(500).send(error)
     }
     
   

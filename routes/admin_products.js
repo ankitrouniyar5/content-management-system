@@ -20,7 +20,7 @@ router.get('/',isAdmin,async (req,res)=>{
             count
         })
     } catch (error) {
-        
+        res.send(error)
     }
    
 })
@@ -40,7 +40,7 @@ router.get('/add-product',isAdmin,async (req,res)=>{
             categories
         })
     } catch (error) {
-        console.log(error)
+        res.send(error)
     }
     
 })

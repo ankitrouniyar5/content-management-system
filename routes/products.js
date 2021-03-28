@@ -19,7 +19,7 @@ router.get('/',async(req,res)=>{
         products
     })
     } catch (error) {
-        res.status(500).send('Some error')
+        res.status(500).send(error)
     }
     
   
@@ -39,7 +39,7 @@ router.get('/:category',async(req,res)=>{
     })
     } catch (error) {
         console.log(error)
-        res.status(500).send()
+        res.status(500).send(error)
 
     }
     
