@@ -3,11 +3,13 @@ const router = express.Router()
 const fs = require('fs')
 const mkdirp = require('mkdirp')
 const resizeImg = require('resize-img')
+const auth = require('../config/auth')
+const isAdmin = auth.isAdmin 
 
 const Product = require('../models/product')
 const Category = require('../models/category')
 //Get product index
-router.get('/',async (req,res)=>{
+router.get('/',isAdmin,async (req,res)=>{
 
     try {
         count = await Product.countDocuments();
@@ -23,7 +25,7 @@ router.get('/',async (req,res)=>{
    
 })
 
-router.get('/add-product',async (req,res)=>{
+router.get('/add-product',isAdmin,async (req,res)=>{
 
     var desc=""
     var title=""
@@ -162,7 +164,7 @@ router.post('/product-gallery/:id',(req,res)=>{
 
 //get delete images
 
-router.get('/delete-image/:image', (req,res)=>{
+router.get('/delete-image/:image', isAdmin,(req,res)=>{
 
     let originalImage = `public/product_images/` + req.query.id+ `/gallery/` + req.params.image;
     let thumbImage = `public/product_images/` + req.query.id + `/gallery/thumbs/` + req.params.image;
@@ -194,7 +196,7 @@ router.get('/delete-image/:image', (req,res)=>{
 
 //delete product
 
-router.get('/delete-product/:id',(req,res)=>{
+router.get('/delete-product/:id',isAdmin,(req,res)=>{
     
    let id = req.params.id;
    let path = 'public/product_images/' + id
@@ -216,7 +218,7 @@ router.get('/delete-product/:id',(req,res)=>{
 
 })
 
-router.get('/edit-product/:id',async (req,res)=>{
+router.get('/edit-product/:id',isAdmin,async (req,res)=>{
     
     var errors;
     if (req.session.errors ){

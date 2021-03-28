@@ -1,7 +1,7 @@
 const express = require("express")
 const fs = require("fs-extra")
 const router = express.Router()
-
+const auth = require('../config/auth')
 //Page Model
 
 const Product = require('../models/product');
@@ -51,6 +51,7 @@ router.get('/:category/:product',async(req,res)=>{
 
         try {
             galleryImages = null
+            loggedIn = (req.isAuthenticated()) ? true : false
             prod = await Product.findOne({slug :req.params.product})
             galleryDir = `public/product_images/${prod._id}/gallery`
             
@@ -61,7 +62,9 @@ router.get('/:category/:product',async(req,res)=>{
                 res.render('product',{
                     title : prod.title,
                     p : prod,
-                    galleryImages
+                    galleryImages,
+                    loggedIn
+                    
                 })
             })
         } catch (error) {

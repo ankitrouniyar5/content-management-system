@@ -38,3 +38,13 @@ table.align-middle td{
     color: white;
     text-decoration: none;
 }
+
+a:hover {
+        font-weight: 900;
+}
+
+.alert-error {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}

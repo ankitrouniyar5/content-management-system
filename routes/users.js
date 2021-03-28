@@ -45,6 +45,7 @@ router.post('/register',async(req,res)=>{
        if(errors){
            res.render('register',{
                errors,
+               user : null,
                title : 'Register'
            })
        }else{
@@ -107,6 +108,21 @@ router.post('/login',async(req,res,next)=>{
            failureRedirect : '/user/login',
            failureFlash : true
        })(req,res,next)
+    } catch (error) {
+        console.log(error)
+        res.status(500).send('Some error')
+    }
+})
+
+
+//get login
+router.get('/logout',async(req,res)=>{
+
+    try {
+       req.logout()
+       req.flash('success','You have successfully logged out')
+       res.redirect('/user/login')
+  
     } catch (error) {
         console.log(error)
         res.status(500).send('Some error')

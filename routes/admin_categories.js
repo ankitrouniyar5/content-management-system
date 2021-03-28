@@ -1,10 +1,12 @@
 const express = require("express")
 const Category = require('../models/category')
 const router = express.Router()
+const auth = require('../config/auth')
+const isAdmin = auth.isAdmin 
 
 
 //get categorie index
-router.get('/',(req,res)=>{
+router.get('/',isAdmin,(req,res)=>{
    
     Category.find((err,categories)=>{
         if(err) {
@@ -17,7 +19,7 @@ router.get('/',(req,res)=>{
     })
 })
 
-router.get('/add-category',(req,res)=>{
+router.get('/add-category',isAdmin,(req,res)=>{
 
     var title=""
 
@@ -80,7 +82,7 @@ router.post('/add-category',(req,res)=>{
 })
 
 
-router.get('/delete-category/:id',async (req,res)=>{
+router.get('/delete-category/:id',isAdmin,async (req,res)=>{
     try {
         await Category.findByIdAndRemove(req.params.id)
         await Category.find((err,categories)=>{
@@ -95,7 +97,7 @@ router.get('/delete-category/:id',async (req,res)=>{
     }
     })
 
-router.get('/edit-category/:id',async (req,res)=>{
+router.get('/edit-category/:id',isAdmin,async (req,res)=>{
     
     try {
         cat = await Category.findById(req.params.id)
