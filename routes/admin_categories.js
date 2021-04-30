@@ -1,7 +1,7 @@
 const express = require("express")
 const Category = require('../models/category')
 const router = express.Router()
-const auth = require('../config/auth')
+const auth = require('../utilities/auth')
 const isAdmin = auth.isAdmin 
 
 

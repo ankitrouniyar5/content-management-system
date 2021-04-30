@@ -1,7 +1,7 @@
 const express = require("express")
 const Page = require('../models/page')
 const router = express.Router()
-const auth = require('../config/auth')
+const auth = require('../utilities/auth')
 const isAdmin = auth.isAdmin 
 
 router.get('/',isAdmin,(req,res)=>{

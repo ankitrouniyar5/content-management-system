@@ -3,7 +3,7 @@ const router = express.Router()
 const fs = require('fs')
 const mkdirp = require('mkdirp')
 const resizeImg = require('resize-img')
-const auth = require('../config/auth')
+const auth = require('../utilities/auth')
 const isAdmin = auth.isAdmin 
 
 const Product = require('../models/product')

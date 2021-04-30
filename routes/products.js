@@ -1,7 +1,7 @@
 const express = require("express")
 const fs = require("fs-extra")
 const router = express.Router()
-const auth = require('../config/auth')
+const auth = require('../utilities/auth')
 //Page Model
 
 const Product = require('../models/product');

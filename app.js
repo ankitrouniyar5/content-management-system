@@ -1,21 +1,14 @@
 const express = require('express')
 const path = require('path')
-const mongoose = require('mongoose');
-const config = require('./config/database')
 const session = require('express-session')
 const expressValidator = require('express-validator')
 const fileUpload = require('express-fileupload')
 const passport = require('passport')
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT 
 
 //conneting to db
-mongoose.connect(config.database,{useNewUrlParser: true, useUnifiedTopology: true ,useFindAndModify: false })
-const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  console.log("Connection to db established")
-});
+require('./mongoose')
 
 //initialize app
 const app = express()
@@ -113,7 +106,7 @@ app.use(function (req, res, next) {
 app.use(fileUpload());
 
 //passport config
-require('./config/passport')(passport)
+require('./utilities/passport')(passport)
 
 //passport middleware
 app.use(passport.initialize())
@@ -125,7 +118,6 @@ app.get('*',(req,res,next)=>{
     res.locals.cart = req.session.cart
     res.locals.user = req.user || null
     next();
-
 })
 
 //setting up routes
@@ -150,7 +142,6 @@ app.use('/',pages)
 
 
 app.listen(port,()=>{
-
     console.log('Server up and running on ' + port)
 
 })
