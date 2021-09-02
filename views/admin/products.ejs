@@ -21,7 +21,7 @@
         <tbody>
             <% products.forEach((product)=>{ %>
                     <td><%= product.title %></td>
-                    <td>$<%= parseFloat(product.price).toFixed(2) %></td>
+                    <td>Rs <%= parseFloat(product.price).toFixed(2) %></td>
                     <td><%= product.category %></td>
                     <td>
                         <% if(product.image == ""){ %>

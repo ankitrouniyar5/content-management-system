@@ -131,7 +131,6 @@ const admin_categories = require('./routes/admin_categories.js')
 const admin_products = require('./routes/admin_products')
 
 app.use('/products',products)
-
 app.use('/admin/pages',admin_pages)
 app.use('/admin/categories',admin_categories)
 app.use('/admin/products',admin_products)

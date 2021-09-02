@@ -1,17 +1,14 @@
 const localStrategy = require('passport-local').Strategy
-const User = require('../models/user')
-const bcrypt = require('bcryptjs')
+const User = require('../models/user');
+const bcrypt = require('bcryptjs');
 
 module.exports = (passport)=>{
-
     passport.use(new localStrategy(async(username,password,done)=>{
         try {
-            user = await User.findOne({username})
-
+            user = await User.findOne({username});
             if(!user){
                 return done(null,false, {message : 'No user found'})
             }
-
             isMatch = await bcrypt.compare(password,user.password)
             if(isMatch){
                 return done(null,user)
@@ -21,9 +18,7 @@ module.exports = (passport)=>{
         } catch (error) {
             console.log(error)
         }
-       
     }))
-
     passport.serializeUser((user, done)=>{
         done(null,user.id)
     })
