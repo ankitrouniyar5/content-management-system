@@ -14,12 +14,13 @@ A simple website made using **HTML,CSS,JS,EXPRESS** and uses **MongoDb** for the
 ![Image of product page](/snapshots/books.png)
 
 * Product details :
-![Image of product details page](/snapshots/book details.png)
+![Image of product details page](/snapshots/book-details.png)
 
 * Login Page :
 ![Image of login page](/snapshots/login.png)
 
-After Logging In as Admin the admin get features to **add** ,**edit** and **delete**
+#### After Logging In as Admin the admin get features to **add** ,**edit** and **delete**
+<br>
     * *category*
     * *page*
     * *products*
@@ -33,9 +34,9 @@ After Logging In as Admin the admin get features to **add** ,**edit** and **dele
 * Products page(Admin) :
 ![Image of login page](/snapshots/products.png)
 
-![Image of login page](/snapshots/add product.png)
+![Image of login page](/snapshots/add-product.png)
 
-![Image of login page](/snapshots/edit product.png)
+![Image of login page](/snapshots/edit-product.png)
 
 
  
